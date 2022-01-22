@@ -32,8 +32,6 @@ public class OrderTranslatorTest {
     @ParameterizedTest
     @MethodSource("translateOrderSuccessUseCases")
     public void testTranslateOrderSuccess(BeverageOrder input, String expectedCommand) {
-        Mockito.when(beverageQuantityChecker.isEmpty(Mockito.any())).thenReturn(false);
-
         boolean result = orderTranslator.translateOrder(input);
         Mockito.verify(drinkMaker).makeDrinks(expectedCommand);
         assertTrue(result);
@@ -94,8 +92,6 @@ public class OrderTranslatorTest {
 
     @Test
     public void testFullStatistics() {
-        Mockito.when(beverageQuantityChecker.isEmpty(Mockito.any())).thenReturn(false);
-
         orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")));
         orderTranslator.translateOrder(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.9")));
         orderTranslator.translateOrder(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.8")));

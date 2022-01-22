@@ -16,19 +16,24 @@ public class OrderTranslator {
         BigDecimal moneyGiven = beverageOrder.getMoneyGiven();
         BigDecimal price = beverageType.getPrice();
 
-        if(moneyGiven.compareTo(price) >= 0) {
-            String command = beverageType.getCommandPrefix();
-            if(beverageOrder.getSugarAmount() > 0) {
-                command = command.concat(":" + beverageOrder.getSugarAmount() + ":0");
+        if(!beverageQuantityChecker.isEmpty(beverageType)) {
+            if(moneyGiven.compareTo(price) >= 0) {
+                String command = beverageType.getCommandPrefix();
+                if(beverageOrder.getSugarAmount() > 0) {
+                    command = command.concat(":" + beverageOrder.getSugarAmount() + ":0");
+                } else {
+                    command = command.concat("::");
+                }
+                drinkMaker.makeDrinks(command);
+                addSale(beverageType);
+                return true;
             } else {
-                command = command.concat("::");
+                BigDecimal missingMoney = price.subtract(moneyGiven);
+                sendMessage("Please insert " + missingMoney.doubleValue() + " euros");
+                return false;
             }
-            drinkMaker.makeDrinks(command);
-            addSale(beverageType);
-            return true;
         } else {
-            BigDecimal missingMoney = price.subtract(moneyGiven);
-            sendMessage("Please insert " + missingMoney.doubleValue() + " euros");
+            emailNotifier.notifyMissingDrink(beverageType);
             return false;
         }
     }
