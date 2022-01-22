@@ -5,6 +5,10 @@ public class OrderTranslator {
 
     private DrinkMaker drinkMaker;
 
+    private BeverageQuantityChecker beverageQuantityChecker;
+
+    private EmailNotifier emailNotifier;
+
     private DrinkMakerStatistics drinkMakerStatistics = new DrinkMakerStatistics();
 
     public boolean translateOrder(BeverageOrder beverageOrder) {

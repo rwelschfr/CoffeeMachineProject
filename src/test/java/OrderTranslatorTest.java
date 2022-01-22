@@ -1,5 +1,3 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(MockitoExtension.class)
 public class OrderTranslatorTest {
 
@@ -23,9 +23,17 @@ public class OrderTranslatorTest {
     @Mock
     private DrinkMaker drinkMaker;
 
+    @Mock
+    private BeverageQuantityChecker beverageQuantityChecker;
+
+    @Mock
+    private EmailNotifier emailNotifier;
+
     @ParameterizedTest
     @MethodSource("translateOrderSuccessUseCases")
     public void testTranslateOrderSuccess(BeverageOrder input, String expectedCommand) {
+        Mockito.when(beverageQuantityChecker.isEmpty(Mockito.any())).thenReturn(false);
+
         boolean result = orderTranslator.translateOrder(input);
         Mockito.verify(drinkMaker).makeDrinks(expectedCommand);
         assertTrue(result);
@@ -86,6 +94,8 @@ public class OrderTranslatorTest {
 
     @Test
     public void testFullStatistics() {
+        Mockito.when(beverageQuantityChecker.isEmpty(Mockito.any())).thenReturn(false);
+
         orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")));
         orderTranslator.translateOrder(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.9")));
         orderTranslator.translateOrder(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.8")));
@@ -105,5 +115,24 @@ public class OrderTranslatorTest {
         assertEquals(salesMap.get(BeverageType.TEA_EXTRA_HOT), 1);
         assertEquals(salesMap.get(BeverageType.COFFEE_EXTRA_HOT), 1);
         assertEquals(salesMap.get(BeverageType.CHOCOLATE_EXTRA_HOT), 1);
+    }
+
+    @Test
+    public void testTeaShortage() {
+        Mockito.when(beverageQuantityChecker.isEmpty(BeverageType.TEA)).thenReturn(true);
+
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")));
+
+        Mockito.verify(emailNotifier).notifyMissingDrink(BeverageType.TEA);
+        Mockito.verifyNoInteractions(drinkMaker);
+    }
+
+    @Test
+    public void testNoTeaShortage() {
+        Mockito.when(beverageQuantityChecker.isEmpty(BeverageType.TEA)).thenReturn(false);
+
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")));
+
+        Mockito.verifyNoInteractions(emailNotifier);
     }
 }
