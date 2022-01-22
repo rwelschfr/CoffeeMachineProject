@@ -1,12 +1,14 @@
+import java.math.BigDecimal;
+
 public class BeverageOrder {
 
     private BeverageType beverageType;
 
     private int sugarAmount;
 
-    private double moneyGiven;
+    private BigDecimal moneyGiven;
 
-    public BeverageOrder(BeverageType beverageType, int sugarAmount, double moneyGiven) {
+    public BeverageOrder(BeverageType beverageType, int sugarAmount, BigDecimal moneyGiven) {
         this.beverageType = beverageType;
         this.sugarAmount = sugarAmount;
         this.moneyGiven = moneyGiven;
@@ -20,7 +22,7 @@ public class BeverageOrder {
         return sugarAmount;
     }
 
-    public double getMoneyGiven() {
+    public BigDecimal getMoneyGiven() {
         return moneyGiven;
     }
 }

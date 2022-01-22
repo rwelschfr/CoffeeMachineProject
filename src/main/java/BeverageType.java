@@ -1,15 +1,18 @@
+import java.math.BigDecimal;
+
 public enum BeverageType {
-    TEA(0.4),
-    COFFEE(0.5),
-    CHOCOLATE(0.6);
 
-    private double price;
+    TEA(new BigDecimal("0.4")),
+    COFFEE(new BigDecimal("0.6")),
+    CHOCOLATE(new BigDecimal("0.5"));
 
-    BeverageType(double price) {
+    private BigDecimal price;
+
+    BeverageType(BigDecimal price) {
         this.price = price;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 }

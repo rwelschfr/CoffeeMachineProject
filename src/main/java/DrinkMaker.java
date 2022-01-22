@@ -1,5 +1,5 @@
 public interface DrinkMaker {
 
-    public boolean makeDrinks(String order);
+    public boolean makeDrinks(String command);
 
 }

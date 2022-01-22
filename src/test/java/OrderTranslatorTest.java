@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,9 +30,9 @@ public class OrderTranslatorTest {
 
     private static Stream<Arguments> translateOrderSuccessUseCases() {
         return Stream.of(
-            Arguments.of(new BeverageOrder(BeverageType.TEA, 0, 0.4), "T::"),
-            Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, 0.9), "C:1:0"),
-            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, 0.8), "H:2:0")
+            Arguments.of(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")), "T::"),
+            Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.9")), "C:1:0"),
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.8")), "H:2:0")
         );
     }
 
@@ -45,8 +46,8 @@ public class OrderTranslatorTest {
 
     private static Stream<Arguments> translateOrderNotEnoughMoneyUseCases() {
         return Stream.of(
-            Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, 0.5), "M:Please insert 0.1 euros"),
-            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, 0.3), "M:Please insert 0.2 euros")
+            Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.5")), "M:Please insert 0.1 euros"),
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.3")), "M:Please insert 0.2 euros")
         );
     }
 

@@ -1,24 +1,34 @@
+import java.math.BigDecimal;
+
 public class OrderTranslator {
 
     private DrinkMaker drinkMaker;
 
     public boolean translateOrder(BeverageOrder beverageOrder) {
-        String command = switch(beverageOrder.getBeverageType()) {
-            case COFFEE -> "C";
-            case TEA -> "T";
-            case CHOCOLATE -> "H";
-            default -> null;
-        };
-        if(command == null) {
+        BigDecimal moneyGiven = beverageOrder.getMoneyGiven();
+        BigDecimal price = beverageOrder.getBeverageType().getPrice();
+        if(moneyGiven.compareTo(price) >= 0) {
+            String command = switch(beverageOrder.getBeverageType()) {
+                case COFFEE -> "C";
+                case TEA -> "T";
+                case CHOCOLATE -> "H";
+                default -> null;
+            };
+            if(command == null) {
+                return false;
+            }
+            if(beverageOrder.getSugarAmount() > 0) {
+                command = command.concat(":" + beverageOrder.getSugarAmount() + ":0");
+            } else {
+                command = command.concat("::");
+            }
+            drinkMaker.makeDrinks(command);
+            return true;
+        } else {
+            BigDecimal missingMoney = price.subtract(moneyGiven);
+            sendMessage("Please insert " + missingMoney.doubleValue() + " euros");
             return false;
         }
-        if(beverageOrder.getSugarAmount() > 0) {
-            command = command.concat(":" + beverageOrder.getSugarAmount() + ":0");
-        } else {
-            command = command.concat("::");
-        }
-        drinkMaker.makeDrinks(command);
-        return true;
     }
 
     public boolean sendMessage(String message) {
