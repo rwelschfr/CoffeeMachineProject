@@ -1,4 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -9,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,5 +73,37 @@ public class OrderTranslatorTest {
             Arguments.of("Test message 1", "M:Test message 1"),
             Arguments.of("Test message 2", "M:Test message 2")
         );
+    }
+
+    @Test
+    public void testEmptyStatistics() {
+        DrinkMakerStatistics drinkMakerStatistics = orderTranslator.getDrinkMakerStatistics();
+        assertEquals(drinkMakerStatistics.getMoneyEarned(), BigDecimal.ZERO);
+        for(Map.Entry<BeverageType, Integer> entry : drinkMakerStatistics.getSalesMap().entrySet()) {
+            assertEquals(entry.getValue(), 0);
+        }
+    }
+
+    @Test
+    public void testFullStatistics() {
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.9")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.8")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.ORANGE_JUICE, 0, new BigDecimal("0.8")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA_EXTRA_HOT, 0, new BigDecimal("0.5")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.COFFEE_EXTRA_HOT, 2, new BigDecimal("0.9")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.CHOCOLATE_EXTRA_HOT, 1, new BigDecimal("0.8")));
+        orderTranslator.translateOrder(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.6")));
+
+        DrinkMakerStatistics drinkMakerStatistics = orderTranslator.getDrinkMakerStatistics();
+        assertEquals(drinkMakerStatistics.getMoneyEarned(), new BigDecimal("4.0"));
+        Map<BeverageType, Integer> salesMap = drinkMakerStatistics.getSalesMap();
+        assertEquals(salesMap.get(BeverageType.TEA), 2);
+        assertEquals(salesMap.get(BeverageType.COFFEE), 1);
+        assertEquals(salesMap.get(BeverageType.CHOCOLATE), 1);
+        assertEquals(salesMap.get(BeverageType.ORANGE_JUICE), 1);
+        assertEquals(salesMap.get(BeverageType.TEA_EXTRA_HOT), 1);
+        assertEquals(salesMap.get(BeverageType.COFFEE_EXTRA_HOT), 1);
+        assertEquals(salesMap.get(BeverageType.CHOCOLATE_EXTRA_HOT), 1);
     }
 }

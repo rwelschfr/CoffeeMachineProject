@@ -4,6 +4,8 @@ public class OrderTranslator {
 
     private DrinkMaker drinkMaker;
 
+    private DrinkMakerStatistics drinkMakerStatistics;
+
     public boolean translateOrder(BeverageOrder beverageOrder) {
         BigDecimal moneyGiven = beverageOrder.getMoneyGiven();
         BigDecimal price = beverageOrder.getBeverageType().getPrice();
@@ -27,5 +29,17 @@ public class OrderTranslator {
         String command = "M:" + message;
         drinkMaker.makeDrinks(command);
         return true;
+    }
+
+    DrinkMakerStatistics getDrinkMakerStatistics() {
+        return drinkMakerStatistics;
+    }
+
+    public void addSale(BeverageType beverageType) {
+
+    }
+
+    public void displayStatistics() {
+
     }
 }
