@@ -32,7 +32,11 @@ public class OrderTranslatorTest {
         return Stream.of(
             Arguments.of(new BeverageOrder(BeverageType.TEA, 0, new BigDecimal("0.4")), "T::"),
             Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.9")), "C:1:0"),
-            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.8")), "H:2:0")
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.8")), "H:2:0"),
+            Arguments.of(new BeverageOrder(BeverageType.ORANGE_JUICE, 0, new BigDecimal("0.8")), "O::"),
+            Arguments.of(new BeverageOrder(BeverageType.TEA_EXTRA_HOT, 0, new BigDecimal("0.5")), "Th::"),
+            Arguments.of(new BeverageOrder(BeverageType.COFFEE_EXTRA_HOT, 2, new BigDecimal("0.9")), "Ch:2:0"),
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE_EXTRA_HOT, 1, new BigDecimal("0.8")), "Hh:1:0")
         );
     }
 
@@ -47,7 +51,9 @@ public class OrderTranslatorTest {
     private static Stream<Arguments> translateOrderNotEnoughMoneyUseCases() {
         return Stream.of(
             Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, new BigDecimal("0.5")), "M:Please insert 0.1 euros"),
-            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.3")), "M:Please insert 0.2 euros")
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, new BigDecimal("0.3")), "M:Please insert 0.2 euros"),
+            Arguments.of(new BeverageOrder(BeverageType.ORANGE_JUICE, 0, new BigDecimal("0.2")), "M:Please insert 0.4 euros"),
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE_EXTRA_HOT, 2, new BigDecimal("0.3")), "M:Please insert 0.2 euros")
         );
     }
 
