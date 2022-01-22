@@ -21,4 +21,10 @@ public class OrderTranslator {
         drinkMaker.makeDrinks(command);
         return true;
     }
+
+    public boolean sendMessage(String message) {
+        String command = "M:" + message;
+        drinkMaker.makeDrinks(command);
+        return true;
+    }
 }

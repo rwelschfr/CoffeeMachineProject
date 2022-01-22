@@ -34,4 +34,19 @@ public class OrderTranslatorTest {
             Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.CHOCOLATE, 2, false), "H:2:0")
         );
     }
+
+    @ParameterizedTest
+    @MethodSource("sendMessageUseCases")
+    public void testSendMessage(String input, String expectedCommand) {
+        boolean result = orderTranslator.sendMessage(input);
+        Mockito.verify(drinkMaker).makeDrinks(expectedCommand);
+        assertTrue(result);
+    }
+
+    private static Stream<Arguments> sendMessageUseCases() {
+        return Stream.of(
+            Arguments.of("Test message 1", "M:Test message 1"),
+            Arguments.of("Test message 2", "M:Test message 2")
+        );
+    }
 }
