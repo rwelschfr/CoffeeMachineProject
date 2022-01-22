@@ -29,9 +29,9 @@ public class OrderTranslatorTest {
 
     private static Stream<Arguments> translateOrderUseCases() {
         return Stream.of(
-            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.TEA, 0, false), "T::"),
-            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.COFFEE, 1, true), "C:1:1"),
-            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.CHOCOLATE, 2, false), "H:2:0")
+            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.TEA, 0), "T::"),
+            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.COFFEE, 1), "C:1:0"),
+            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.CHOCOLATE, 2), "H:2:0")
         );
     }
 

@@ -13,8 +13,7 @@ public class OrderTranslator {
             return false;
         }
         if(beverageOrder.getSugarAmount() > 0) {
-            command = command.concat(":" + beverageOrder.getSugarAmount());
-            command = command.concat(":" + (beverageOrder.isHasStick() ? 1 : 0));
+            command = command.concat(":" + beverageOrder.getSugarAmount() + ":0");
         } else {
             command = command.concat("::");
         }

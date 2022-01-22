@@ -8,12 +8,9 @@ public class BeverageOrder {
 
     private int sugarAmount;
 
-    private boolean hasStick;
-
-    public BeverageOrder(BeverageType beverageType, int sugarAmount, boolean hasStick) {
+    public BeverageOrder(BeverageType beverageType, int sugarAmount) {
         this.beverageType = beverageType;
         this.sugarAmount = sugarAmount;
-        this.hasStick = hasStick;
     }
 
     public BeverageType getBeverageType() {
@@ -22,9 +19,5 @@ public class BeverageOrder {
 
     public int getSugarAmount() {
         return sugarAmount;
-    }
-
-    public boolean isHasStick() {
-        return hasStick;
     }
 }
