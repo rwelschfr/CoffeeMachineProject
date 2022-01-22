@@ -8,15 +8,7 @@ public class OrderTranslator {
         BigDecimal moneyGiven = beverageOrder.getMoneyGiven();
         BigDecimal price = beverageOrder.getBeverageType().getPrice();
         if(moneyGiven.compareTo(price) >= 0) {
-            String command = switch(beverageOrder.getBeverageType()) {
-                case COFFEE -> "C";
-                case TEA -> "T";
-                case CHOCOLATE -> "H";
-                default -> null;
-            };
-            if(command == null) {
-                return false;
-            }
+            String command = beverageOrder.getBeverageType().getCommandPrefix();
             if(beverageOrder.getSugarAmount() > 0) {
                 command = command.concat(":" + beverageOrder.getSugarAmount() + ":0");
             } else {
