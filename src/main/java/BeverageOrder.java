@@ -1,16 +1,15 @@
 public class BeverageOrder {
 
-    public enum BeverageType {
-        TEA, COFFEE, CHOCOLATE;
-    }
-
     private BeverageType beverageType;
 
     private int sugarAmount;
 
-    public BeverageOrder(BeverageType beverageType, int sugarAmount) {
+    private double moneyGiven;
+
+    public BeverageOrder(BeverageType beverageType, int sugarAmount, double moneyGiven) {
         this.beverageType = beverageType;
         this.sugarAmount = sugarAmount;
+        this.moneyGiven = moneyGiven;
     }
 
     public BeverageType getBeverageType() {
@@ -19,5 +18,9 @@ public class BeverageOrder {
 
     public int getSugarAmount() {
         return sugarAmount;
+    }
+
+    public double getMoneyGiven() {
+        return moneyGiven;
     }
 }

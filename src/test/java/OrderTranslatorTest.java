@@ -20,18 +20,33 @@ public class OrderTranslatorTest {
     private DrinkMaker drinkMaker;
 
     @ParameterizedTest
-    @MethodSource("translateOrderUseCases")
-    public void testTranslateOrder(BeverageOrder input, String expectedCommand) {
+    @MethodSource("translateOrderSuccessUseCases")
+    public void testTranslateOrderSuccess(BeverageOrder input, String expectedCommand) {
         boolean result = orderTranslator.translateOrder(input);
         Mockito.verify(drinkMaker).makeDrinks(expectedCommand);
         assertTrue(result);
     }
 
-    private static Stream<Arguments> translateOrderUseCases() {
+    private static Stream<Arguments> translateOrderSuccessUseCases() {
         return Stream.of(
-            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.TEA, 0), "T::"),
-            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.COFFEE, 1), "C:1:0"),
-            Arguments.of(new BeverageOrder(BeverageOrder.BeverageType.CHOCOLATE, 2), "H:2:0")
+            Arguments.of(new BeverageOrder(BeverageType.TEA, 0, 0.4), "T::"),
+            Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, 0.9), "C:1:0"),
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, 0.8), "H:2:0")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("translateOrderNotEnoughMoneyUseCases")
+    public void testTranslateOrderNotEnoughMoney(BeverageOrder input, String expectedCommand) {
+        boolean result = orderTranslator.translateOrder(input);
+        Mockito.verify(drinkMaker).makeDrinks(expectedCommand);
+        assertFalse(result);
+    }
+
+    private static Stream<Arguments> translateOrderNotEnoughMoneyUseCases() {
+        return Stream.of(
+            Arguments.of(new BeverageOrder(BeverageType.COFFEE, 1, 0.5), "M:Please insert 0.1 euros"),
+            Arguments.of(new BeverageOrder(BeverageType.CHOCOLATE, 2, 0.3), "M:Please insert 0.2 euros")
         );
     }
 
